@@ -8,6 +8,10 @@
 const byte ROWS = 4; //four rows
 const byte COLS = 4; //four columns
 
+const int buzzer_pin =  1;// the number of the buzzer pin
+const int cuttable_wires_out =  10;// pin of fake-cuttable wire output
+const int cuttable_wires_in[10]={11, 12, 13} // pins of fake-cuttable wires input
+
 char keys[ROWS][COLS] = {
   {'1','2','3','A'},
   {'4','5','6','B'},
