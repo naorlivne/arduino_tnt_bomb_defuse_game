@@ -10,7 +10,7 @@ const byte COLS = 4; //four columns
 
 const int buzzer_pin =  1;// the number of the buzzer pin
 const int cuttable_wires_out =  10;// pin of fake-cuttable wire output
-const int cuttable_wires_in[10]={11, 12, 13} // pins of fake-cuttable wires input
+const int cuttable_wires_in[]={11, 12, 13}; // pins of fake-cuttable wires input
 
 char keys[ROWS][COLS] = {
   {'1','2','3','A'},
@@ -30,24 +30,40 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
 void setup(){
-  Serial.begin(9600);
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
-    Serial.println(F("SSD1306 allocation failed"));
     for(;;);
   }
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0, 0);
+
+  // initilize pin modes
+
+  pinMode(buzzer_pin, OUTPUT);
+  pinMode(cuttable_wires_out, OUTPUT);
+  for (byte i = 0; i < 3; i = i + 1) {
+    pinMode(cuttable_wires_in[i], INPUT);
+  }
+}
+
+void ring_buzzer_on(){
+  digitalWrite(buzzer_pin, HIGH);
+}
+
+
+void ring_buzzer_off(){
+  digitalWrite(buzzer_pin, LOW);
 }
   
 void loop(){
+
   char key = keypad.getKey();// Read the key
-  
   // Print if key pressed
   if (key){
-    Serial.print("Key Pressed : ");
-    Serial.println(key);
+    ring_buzzer_on();
+    delay(1000);
+    ring_buzzer_off();
     display.println(key);
     display.display();
     display.clearDisplay();
