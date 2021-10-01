@@ -102,14 +102,19 @@ void loop(){
       }
   }
   else if (bomb_state == "counting") {
-      display.println("counting down:");
-      display.display();
-      display.setCursor(0, 16);
       while (countdown_seconds != 0){
+        display.println("counting down:");
+        display.display();
+        display.setCursor(0, 16);
         display.println(countdown_seconds);
         display.display();
         display.clearDisplay();
         display.setCursor(0, 0);
+        delay(1000);
+        countdown_seconds = countdown_seconds -1;
+      }
+      if (countdown_seconds == 0){
+      bomb_state = "exploding";  
       }
   }
   else if (bomb_state == "exploding") {
@@ -118,5 +123,6 @@ void loop(){
     display.display();
     display.clearDisplay();
     display.setCursor(0, 0);
+    ring_buzzer_off();
   }
 }
