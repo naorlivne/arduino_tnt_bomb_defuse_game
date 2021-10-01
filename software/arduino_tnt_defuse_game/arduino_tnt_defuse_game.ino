@@ -25,11 +25,16 @@ byte colPins[COLS] = {9, 8, 7, 6}; //connect to the column pinouts of the keypad
 // change to true if you want buzzing on key presses
 bool buzz_on_key_press = false;
 
-// set bomb starting state to armed, as switch doesn't allow string it will be mapped by the following table
-// 0 = arming
-// 1 = counting
-// 2 = exploded
-int bomb_state = 0;
+// set bomb starting state to armed
+String bomb_state = "arming";
+
+// initial countdown seconds
+int countdown_seconds = 90;
+
+// location of key
+int key_location = 0;
+
+String defuse_key = "";
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
@@ -71,8 +76,7 @@ void ring_buzzer_off(){
 void loop(){
   
 
-  switch (bomb_state) {
-  case 0:
+  if (bomb_state == "arming") {
      char key = keypad.getKey();// Read the key
     // Print if key pressed
     if (key){
@@ -81,24 +85,38 @@ void loop(){
         delay(100);
         ring_buzzer_off();
       }
+      if (key_location < 4) {
+      key_location = key_location + 1;
+      defuse_key = defuse_key + key;
       display.println("enter defuse code:");
       display.display();
       display.setCursor(0, 16);
-      display.println(key);
+      display.println(defuse_key);
       display.display();
       display.clearDisplay();
       display.setCursor(0, 0);
+      }
   }
-    break;
-  case 1:
-    //do something when var equals 2
-    break;
-  case 2:
+    if (key_location == 4){
+      bomb_state = "counting";  
+      }
+  }
+  else if (bomb_state == "counting") {
+      display.println("counting down:");
+      display.display();
+      display.setCursor(0, 16);
+      while (countdown_seconds != 0){
+        display.println(countdown_seconds);
+        display.display();
+        display.clearDisplay();
+        display.setCursor(0, 0);
+      }
+  }
+  else if (bomb_state == "exploding") {
     ring_buzzer_on();
     display.println("bomb exploded");
     display.display();
     display.clearDisplay();
     display.setCursor(0, 0);
-    break;
   }
 }
