@@ -31,6 +31,9 @@ String bomb_state = "arming";
 // initial countdown seconds
 int countdown_seconds = 90;
 
+// initial delay speed time, the lower it is the faster the countdown will be
+int delay_speed = 1000;
+
 // location of key
 int key_location = 0;
 
@@ -57,7 +60,7 @@ void setup(){
   pinMode(buzzer_pin, OUTPUT);
   pinMode(cuttable_wires_out, OUTPUT);
   for (byte i = 0; i < 3; i = i + 1) {
-    pinMode(cuttable_wires_in[i], INPUT);
+    pinMode(cuttable_wires_in[i], INPUT_PULLUP);
   }
 
 }
@@ -72,10 +75,18 @@ void ring_buzzer_on(){
 void ring_buzzer_off(){
   digitalWrite(buzzer_pin, LOW);
 }
+
+bool cuttable_wires_state(int pin_number){
+  if (digitalRead(cuttable_wires_in[pin_number]) == HIGH){
+    return true;
+  }
+  else {
+    return false;
+    }
+  }
   
 void loop(){
-  
-
+  digitalWrite(cuttable_wires_out, HIGH);
   if (bomb_state == "arming") {
      char key = keypad.getKey();// Read the key
     // Print if key pressed
@@ -110,8 +121,19 @@ void loop(){
         display.display();
         display.clearDisplay();
         display.setCursor(0, 0);
-        delay(1000);
+        delay(delay_speed);
         countdown_seconds = countdown_seconds -1;
+        if (cuttable_wires_state(0) == false){
+          bomb_state = "exploding";
+          break;
+       }
+        if (cuttable_wires_state(1) == false){
+          delay_speed = 250;
+        }
+        if (cuttable_wires_state(2) == false){
+          bomb_state = "arming";
+          break;
+        }
       }
       if (countdown_seconds == 0){
       bomb_state = "exploding";  
