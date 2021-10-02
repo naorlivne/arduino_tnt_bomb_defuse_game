@@ -30,6 +30,7 @@ Once the bomb go boom both a visual warning and an audioable (rather annoying on
 * Hot glue gun & glue sticks
 * Soldering iron & tin
 * Electric insolation tape and/or electric shrink-wrap
+* wire cutter
 
 ## Software
 
