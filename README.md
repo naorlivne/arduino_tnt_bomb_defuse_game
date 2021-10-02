@@ -1,4 +1,4 @@
-![bomb defuse starting up](https://raw.githubusercontent.com/naorlivne/arduino_tnt_bomb_defuse_game/master/hardware/P11002-162013.jpg)![]
+![bomb defuse starting up](https://raw.githubusercontent.com/naorlivne/arduino_tnt_bomb_defuse_game/master/hardware/P11002-162013.jpg)
 
 
 # arduino_tnt_bomb_defuse_game
