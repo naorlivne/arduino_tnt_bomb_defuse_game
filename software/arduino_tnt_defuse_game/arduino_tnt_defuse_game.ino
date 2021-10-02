@@ -171,7 +171,7 @@ void loop(){
       }
   }
   else if (bomb_state == "exploding") {
-    //ring_buzzer_on();
+    ring_buzzer_on();
     display.println("bomb exploded");
     display.display();
     display.clearDisplay();
