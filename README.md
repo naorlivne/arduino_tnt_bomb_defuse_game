@@ -1,3 +1,6 @@
+![bomb defuse starting up](https://raw.githubusercontent.com/naorlivne/arduino_tnt_bomb_defuse_game/master/hardware/P11002-162013.jpg)![]
+
+
 # arduino_tnt_bomb_defuse_game
 A defuse the bomb type game, perfect for airsoft/paintball/etc, has multiple ways of disabling the bomb for extra fun:
 
