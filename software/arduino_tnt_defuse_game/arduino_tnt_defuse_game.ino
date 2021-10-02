@@ -176,7 +176,7 @@ void loop(){
     display.display();
     display.clearDisplay();
     display.setCursor(0, 0);
-    delay(1000);
+    delay(100);
     ring_buzzer_off();
   }
     else if (bomb_state == "defused") {
