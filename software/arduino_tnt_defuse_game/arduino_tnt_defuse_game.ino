@@ -32,12 +32,16 @@ String bomb_state = "arming";
 int countdown_seconds = 90;
 
 // initial delay speed time, the lower it is the faster the countdown will be
-int delay_speed = 1000;
+int delay_speed = 25;
+
+// starting delay
+int current_delay = 0;
 
 // location of key
 int key_location = 0;
 
 String defuse_key = "";
+String defuse_try_key = "";
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
@@ -113,25 +117,52 @@ void loop(){
       }
   }
   else if (bomb_state == "counting") {
+      key_location = 0;
       while (countdown_seconds != 0){
-        display.println("counting down:");
+        char key = keypad.getKey();
+        if (key){
+            if (buzz_on_key_press == true){
+              ring_buzzer_on();
+              delay(100);
+              ring_buzzer_off();
+            }
+            if (key_location < 4) {
+            key_location = key_location + 1;
+            defuse_try_key = defuse_try_key + key;
+            }
+            if (key_location == 4) {
+              if (defuse_try_key == defuse_key){
+                bomb_state = "defused";
+                break;
+                }
+              else {
+              bomb_state = "exploding";
+              break;
+              }
+            }
+        }
+        display.println("counting down: " + String(countdown_seconds));
         display.display();
         display.setCursor(0, 16);
-        display.println(countdown_seconds);
+        display.println("defuse code: " +  String(defuse_try_key));
         display.display();
         display.clearDisplay();
         display.setCursor(0, 0);
-        delay(delay_speed);
-        countdown_seconds = countdown_seconds -1;
+        delay(1);
+        if (current_delay == delay_speed){
+          countdown_seconds = countdown_seconds -1;
+          current_delay = 0;
+        }
+        current_delay = current_delay + 1;
         if (cuttable_wires_state(0) == false){
           bomb_state = "exploding";
           break;
        }
         if (cuttable_wires_state(1) == false){
-          delay_speed = 250;
+          delay_speed = 10;
         }
         if (cuttable_wires_state(2) == false){
-          bomb_state = "arming";
+          bomb_state = "defused";
           break;
         }
       }
@@ -140,11 +171,18 @@ void loop(){
       }
   }
   else if (bomb_state == "exploding") {
-    ring_buzzer_on();
+    //ring_buzzer_on();
     display.println("bomb exploded");
     display.display();
     display.clearDisplay();
     display.setCursor(0, 0);
+    delay(1000);
     ring_buzzer_off();
+  }
+    else if (bomb_state == "defused") {
+    display.println("bomb defused");
+    display.display();
+    display.clearDisplay();
+    display.setCursor(0, 0);
   }
 }
